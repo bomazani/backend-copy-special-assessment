@@ -23,7 +23,8 @@ def get_special_paths(dir):
     for root, dirs, files in os.walk("."):  
         for filename in files:
             if re.search(r'\__\w*\__', filename):
-                print('*Special* ' + filename)
+                print(os.path.abspath(filename))
+
     return
 
 
