@@ -40,29 +40,35 @@ def copy_to(paths, todir):
 
 def zip_to(paths, zippath):
     ### given a list of paths, zip those files up into the given zipfile ###
+    ### command line: $ python copyspecial.py --tozip 'new zip file name' -d 'folder/files to compress'
     print("I'm zippy!")
-    if not os.path.isfile(zippath):
-        print('Yep, it is a file!')
-        # zip_archive = zipfile.ZipFile(filename, "w")
-        # zip_archive.write('Testing 1,2,3.')
-        # zip_archive.close()
+    # contents = commands.getstatusoutput("ls " + str(zippath))
+    # subcontents = contents[1].split('\n')
+    # print(subcontents)
+    # zip_it = 'zip -j zippath ' + str(contents[1].split('\n'))
+    # print(zip_it)
+    # commands.getstatusoutput(zip_it)
+    for file in paths:
+        zip_it = 'zip -j {} {}'.format(zippath, file)
+        commands.getstatusoutput(zip_it)
+        print(zip_it)
 
-    else:
-        print('Nope! NOT a file!')
-    
-    # with zipfile.ZipFile(filename, "w") as zf
-    # -or-
-    # zip_archive = zipfile.ZipFile(filename, "w")
-    # zip_archive.close()
+
+    # commands.getstatusoutput('zip -j zippath ' + str(subcontents))
+    # commands.getstatusoutput('zip -j zippath ' + str(contents[1].split('\n')))
+
 
 def create_parser():
     # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-d', '--dir', help='source directory of files to search', default='.')
+    # parser.add_argument(
+    #     'dir', help='source directory of files to search', default='.')
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
     # TODO need an argument to pick up 'from_dir'
-    parser.add_argument(
-        '-d', '--dir', help='source directory of files to search', default='.')
+
     return parser
 
 # Write functions and modify main() to call them
@@ -109,5 +115,5 @@ def main(args):
 if __name__ == "__main__":
     # the following line shaves the program file name off of the command line args
     my_args = sys.argv[1:]
-    print my_args
+    # print my_args
     main(my_args)

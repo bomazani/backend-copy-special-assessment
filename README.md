@@ -36,12 +36,18 @@ If the "--todir dir" option is present at the start of the command line, do not 
 Part C (calling an external program)
 ------------------------------------
 
-If the "--tozip zipfile" option is present at the start of the command line, run this command: "zip -j zipfile <list all the files>". This will create a zipfile containing the files. Just for fun/reassurance, also print the command line you are going to do first (as shown in lecture). (Windows note: windows does not come with a program to produce standard .zip archives by default, but you can get download the free and open zip program from [www.info-zip.org](http://www.info-zip.org/).)
+If the "--tozip zipfile" option is present at the start of the command line, run this command: "zip -j zipfile <list all the files>". 
+*** I didn't understand how to run the "zip -j zipfile <list all the files>" command. ***
+*** I could not find any relevant resources when I Googled "python zip -j". ***
+This will create a zipfile containing the files. Just for fun/reassurance, also print the command line you are going to do first (as shown in lecture). (Windows note: windows does not come with a program to produce standard .zip archives by default, but you can get download the free and open zip program from [www.info-zip.org](http://www.info-zip.org/).)
 
+*** My code requires me to add the files to be zipped in addition to the following line. ***
+*** $ python copyspecial.py --tozip zipfile4 -d ./practice_files ***
     $ python copyspecial.py --tozip tmp.zip .
     Command I'm going to do:  
     zip -j tmp.zip /Users/piero/Documents/github/kenzie/backend-copy-special-assessment/xyz__hello__.txt /Users/piero/Documents/github/kenzie/backend-copy-special-assessment/zz__something__.jpg
 
+*** I don't understand what is ment by "the child process". ***
 If the child process exits with an error code, exit with an error code and print the command's output. Test this by trying to write a zip file to a directory that does not exist.
 
     $ python copyspecial.py --tozip /no/way.zip .
