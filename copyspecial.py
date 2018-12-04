@@ -1,10 +1,15 @@
 #!/usr/bin/env python
+
+"""Copy Special exercise
+"""
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
+
+__author__ = 'bomazani, madarp'
 
 import sys
 import re
@@ -14,64 +19,44 @@ import commands
 import argparse
 import zipfile
 
-"""Copy Special exercise
-"""
 
 
 def get_special_paths(dir):
     paths = []
     ### returns a list of the absolute paths of the special files in the given directory ###
     # need to change to >>> os.listdir(dir):
-    for __, __, files in os.walk(dir):  
-        for filename in files:
-            if re.search(r'\__\w*\__', filename):
-                paths.append(os.path.abspath(filename))
+    for file in os.listdir(dir):  
+        if re.search(r'\__\w*\__', file):
+            paths.append(os.path.abspath(os.path.join(dir, file)))
     return paths
 
 
 def copy_to(paths, todir):
+    ## given a list of absolue paths, copy the files into the given directory ##
     if not os.path.isdir(todir):
         os.makedirs(todir)
     todir_path = os.path.abspath(todir)
     for path in paths:
         shutil.copy(path, todir_path)
-#     return is not needed
 
 
 def zip_to(paths, zippath):
-    ### given a list of paths, zip those files up into the given zipfile ###
-    ### command line: $ python copyspecial.py --tozip 'new zip file name' -d 'folder/files to compress'
-    print("I'm zippy!")
-    # contents = commands.getstatusoutput("ls " + str(zippath))
-    # subcontents = contents[1].split('\n')
-    # print(subcontents)
-    # zip_it = 'zip -j zippath ' + str(contents[1].split('\n'))
-    # print(zip_it)
-    # commands.getstatusoutput(zip_it)
-    for file in paths:
-        zip_it = 'zip -j {} {}'.format(zippath, file)
-        commands.getstatusoutput(zip_it)
-        print(zip_it)
-
-
-    # commands.getstatusoutput('zip -j zippath ' + str(subcontents))
-    # commands.getstatusoutput('zip -j zippath ' + str(contents[1].split('\n')))
+    ### given a list of absolute paths, zip those files up into the given destination file ###
+    zip_it = 'zip -j {} '.format(zippath)
+    zip_it += ' '.join(paths)
+    print("Command I'm going to do: \n {}".format(zip_it))
+    status, output = commands.getstatusoutput(zip_it)
+    if status:
+        print(output)
 
 
 def create_parser():
-    # This snippet will help you get started with the argparse module.
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-d', '--dir', help='source directory of files to search', default='.')
-    # parser.add_argument(
-    #     'dir', help='source directory of files to search', default='.')
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
-    # TODO need an argument to pick up 'from_dir'
-
     return parser
-
-# Write functions and modify main() to call them
 
 
 def main(args):
@@ -87,29 +72,14 @@ def main(args):
     dest_path = my_args.todir
     zip_path = my_args.tozip
 
-    # assign variable to the output of the first function 
     my_paths = get_special_paths(path_to_search)
 
-    # Business logic: 
-    # Choose one of three ways to process the my_paths list,
-    # based on cmd line options present or not present
     if dest_path:
         copy_to(my_paths, dest_path)
     elif zip_path:
         zip_to(my_paths, zip_path)
     else:
         print('Here are the special files: {}'.format("\n".join(my_paths)))
-
-
-
-    # TODO you must write your own code to get the cmdline args.
-    # Read the docs and examples for the argparse module about how to do this.
-
-    # Parsing command line arguments is a must-have skill.
-    # This is input data validation.  If something is wrong (or missing) with any
-    # required args, the general rule is to print a usage message and exit(1).
-
-    # Call your functions
 
 
 if __name__ == "__main__":
